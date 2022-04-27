@@ -50,11 +50,8 @@ def reset_connection(dbapi_conn, connection_record):
     """An event of returning a connection back to a pool."""
     try:
         dbapi_conn.connection.rollback()
-    except ValueError as e:
-        if 'Transaction is already rolled back' in getattr(e, 'args', []):
-            pass
-        else:
-            raise
+    except ValueError:
+        pass
     if getattr(dbapi_conn.connection, "staleness", None) is not None:
         dbapi_conn.connection.staleness = None
 
